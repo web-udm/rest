@@ -8,11 +8,15 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 class EntitiesJsonResponse extends JsonResponse
 {
     /**
-     * @param EntityInterface[] $entities
+     * @param array  $entities
+     * @param string $status
+     * @param string $message
+     * @param array  $metaData
+     * @param array  $headers
      */
     public function __construct(array $entities, string $status, string $message, array $metaData, array $headers = [])
     {
-        $entitiesArray = array_reduce($entities, function(array $carry, EntityInterface $item) {
+        $entitiesArray = array_reduce($entities, function (array $carry, EntityInterface $item) {
             return array_merge($carry, $item->toArray());
         }, []);
 
