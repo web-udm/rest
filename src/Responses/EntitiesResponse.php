@@ -5,7 +5,7 @@ namespace App\Responses;
 use App\Entities\EntityInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
-class EntitiesJsonResponse extends JsonResponse
+class EntitiesResponse extends JsonResponse
 {
     /**
      * @param EntityInterface[] $entities

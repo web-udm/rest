@@ -4,7 +4,7 @@ namespace App\Responses;
 
 use Symfony\Component\HttpFoundation\JsonResponse;
 
-class ErrorJsonResponse extends JsonResponse
+class ErrorResponse extends JsonResponse
 {
     public function __construct(string $status, string $message, array $headers = [])
     {
