@@ -2,16 +2,25 @@
 
 namespace Tests\Unit\Serializers;
 
-use App\Serializers\Xml;
+use App\Serializers\XmlSerializer;
+use PHPUnit\Framework\TestCase;
+use Tests\Unit\Serializers\Helpers\StringHelper;
 
-class XmlSerializerTest
+class XmlSerializerTest extends TestCase
 {
     public function testSerialize()
     {
-        $jsonSerializer = new JsonSerializer();
-        $rawData = ['param1' => 'value', 'param2' => 2];
-        $serializedData = $jsonSerializer->serialize($rawData);
+        $stringHelper = new StringHelper();
 
-        $this->assertEquals(file_get_contents(__DIR__ . '/data/json_data.json'), $serializedData);
+        $xmlSerializer = new XmlSerializer();
+        $rawData = ['param1' => 'value', 'param2' => 2];
+
+        $serializedData = $xmlSerializer->serialize($rawData);
+        $serializedDataWithoutSpaces = $stringHelper->cutSpacesAndBreaks($serializedData);
+
+        $expectedResult = file_get_contents(__DIR__ . '/data/xml_data.xml');
+        $expectedResultWithoutSpaces = $stringHelper->cutSpacesAndBreaks($expectedResult);
+
+        $this->assertEquals(($expectedResultWithoutSpaces), $serializedDataWithoutSpaces);
     }
 }
