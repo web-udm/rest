@@ -1,0 +1,8 @@
+{
+  "code": 200,
+  "message": "User successfully fetched",
+  "entity": {
+    "firstname": "Artem",
+    "surname": "Ivanov"
+  }
+}
