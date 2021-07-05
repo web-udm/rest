@@ -4,20 +4,23 @@ namespace App\Builders;
 
 use App\Entities\EntityInterface;
 use App\Responses\BaseResponse;
+use App\Responses\EntitiesResponse;
+use App\Responses\EntityResponse;
 
 class ResponseBuilder
 {
+    private const CONTENT_TYPES = [
+        'json' => ['Content-type' => 'text/json'],
+        'xml' => ['Content-type' => 'text/xml']
+    ];
+
     public function createBaseResponse(
         int $code,
         string $message,
         string $type = 'json',
         array $headers = []
-    ) {
-        $content = $this->serialize([
-            'code' => $code,
-            'message' => $message
-        ], $type);
-
+    ): BaseResponse {
+        $content = $this->serialize(['code' => $code, 'message' => $message], $type);
         $headers = array_merge($headers, $this->getContentType($type));
 
         return new BaseResponse($content, $code, $headers);
@@ -29,8 +32,15 @@ class ResponseBuilder
         string $message = "User successfully fetched",
         string $type = 'json',
         array $headers = ['Content-Type' => 'application/json']
-    ) {
+    ): EntityResponse {
+        $content = $this->serialize([
+            'code' => $code,
+            'message' => $message,
+            'entity' => $entity->toArray()
+        ], $type);
+        $headers = array_merge($headers, $this->getContentType($type));
 
+        return new EntityResponse($content, $code, $headers);
     }
 
     public function createEntitiesResponse(
@@ -40,23 +50,23 @@ class ResponseBuilder
         string $message = "Users successfully fetched",
         string $type = 'json',
         array $headers = ['Content-Type' => 'application/json']
-    ) {
+    ): EntitiesResponse {
 
     }
 
-    private function serialize(array $data, string $type)
+    private function serialize(array $data, string $type): string
     {
-        $serializerName = "\App\Serializers\{$type}Serializer";
+        $serializerName = '\App\Serializers\\' . ucfirst($type) . 'Serializer';
 
         if (class_exists($serializerName)) {
-            return $serializerName->serialize($data);
+            return (new $serializerName())->serialize($data);
         }
 
         throw new \Exception("Для типа $type не найден подходящий сериалайзер");
     }
 
-    private function getContentType(string $type)
+    private function getContentType(string $type): array
     {
-
+        return self::CONTENT_TYPES[$type] ?: [];
     }
 }
