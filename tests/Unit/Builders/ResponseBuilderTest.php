@@ -4,7 +4,7 @@ namespace Tests\Unit\Builders;
 
 use App\Builders\ResponseBuilder;
 use App\Entities\EntitiesCollection;
-use App\Entities\EntityInterface;
+use App\Entities\Entity;
 use App\Responses\BaseResponse;
 use App\Responses\EntitiesResponse;
 use App\Responses\EntityResponse;
@@ -130,11 +130,11 @@ class ResponseBuilderTest extends TestCase
     }
 
     /**
-     * @return EntityInterface
+     * @return Entity
      */
     private function createEntity()
     {
-        return new class implements EntityInterface {
+        return new class implements Entity {
             private $firstname = 'Artem';
             private $surname   = 'Ivanov';
 
@@ -159,12 +159,12 @@ class ResponseBuilderTest extends TestCase
         return new class($entity1, $entity2) implements EntitiesCollection {
             private $entities;
 
-            public function __construct(EntityInterface ...$entities)
+            public function __construct(Entity ...$entities)
             {
                 $this->entities = $entities;
             }
 
-            public function add(EntityInterface $entity): void
+            public function add(Entity $entity): void
             {
             }
 
