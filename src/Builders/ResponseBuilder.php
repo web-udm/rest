@@ -12,14 +12,15 @@ class ResponseBuilder
 {
     private const CONTENT_TYPES = [
         'json' => ['Content-type' => 'text/json'],
-        'xml' => ['Content-type' => 'text/xml']
+        'xml'  => ['Content-type' => 'text/xml'],
     ];
 
     /**
-     * @param int $code
+     * @param int    $code
      * @param string $message
      * @param string $type
-     * @param array $headers
+     * @param array  $headers
+     *
      * @return BaseResponse
      * @throws \Exception
      */
@@ -28,7 +29,8 @@ class ResponseBuilder
         string $message,
         string $type = 'json',
         array $headers = []
-    ): BaseResponse {
+    ): BaseResponse
+    {
         $content = $this->serialize(['code' => $code, 'message' => $message], $type);
         $headers = array_merge($headers, $this->getContentType($type));
 
@@ -37,10 +39,11 @@ class ResponseBuilder
 
     /**
      * @param EntityInterface $entity
-     * @param string $type
-     * @param int $code
-     * @param string $message
-     * @param array $headers
+     * @param string          $type
+     * @param int             $code
+     * @param string          $message
+     * @param array           $headers
+     *
      * @return EntityResponse
      * @throws \Exception
      */
@@ -50,11 +53,12 @@ class ResponseBuilder
         int $code = 200,
         string $message = "User successfully fetched",
         array $headers = []
-    ): EntityResponse {
+    ): EntityResponse
+    {
         $content = $this->serialize([
-            'code' => $code,
+            'code'    => $code,
             'message' => $message,
-            'entity' => $entity->toArray()
+            'entity'  => $entity->toArray(),
         ], $type);
         $headers = array_merge($headers, $this->getContentType($type));
 
@@ -63,11 +67,12 @@ class ResponseBuilder
 
     /**
      * @param EntitiesCollection $entities
-     * @param array $metadata
-     * @param string $type
-     * @param int $code
-     * @param string $message
-     * @param array $headers
+     * @param array              $metadata
+     * @param string             $type
+     * @param int                $code
+     * @param string             $message
+     * @param array              $headers
+     *
      * @return EntitiesResponse
      * @throws \Exception
      */
@@ -78,17 +83,19 @@ class ResponseBuilder
         int $code = 200,
         string $message = "Users successfully fetched",
         array $headers = []
-    ): EntitiesResponse {
+    ): EntitiesResponse
+    {
         $entitiesArray = array_reduce($entities->all(), function (array $carry, EntityInterface $item) {
             $carry[] = $item->toArray();
+
             return $carry;
         }, []);
 
         $content = $this->serialize([
-            'code' => $code,
-            'message' => $message,
-            'meta' => $metadata,
-            'entities' => $entitiesArray
+            'code'     => $code,
+            'message'  => $message,
+            'meta'     => $metadata,
+            'entities' => $entitiesArray,
         ], $type);
 
         $headers = array_merge($headers, $this->getContentType($type));

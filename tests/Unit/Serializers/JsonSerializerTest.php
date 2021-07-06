@@ -10,15 +10,14 @@ class JsonSerializerTest extends TestCase
 {
     public function testSerialize()
     {
-        $stringHelper = new StringHelper();
-
+        $stringHelper   = new StringHelper();
         $jsonSerializer = new JsonSerializer();
-        $rawData = ['param1' => 'value', 'param2' => 2];
+        $rawData        = ['param1' => 'value', 'param2' => 2];
 
-        $serializedData = $jsonSerializer->serialize($rawData);
+        $serializedData              = $jsonSerializer->serialize($rawData);
         $serializedDataWithoutSpaces = $stringHelper->cutSpacesAndBreaks($serializedData);
 
-        $expectedData = file_get_contents(__DIR__ . '/data/json_data.json');
+        $expectedData              = file_get_contents(__DIR__ . '/data/json_data.json');
         $expectedDataWithoutSpaces = $stringHelper->cutSpacesAndBreaks($expectedData);
 
         $this->assertEquals($serializedDataWithoutSpaces, $expectedDataWithoutSpaces);

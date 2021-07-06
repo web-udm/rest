@@ -8,6 +8,7 @@ class XmlSerializer
 {
     /**
      * @param array $data
+     *
      * @return string
      */
     public function serialize(array $data): string
