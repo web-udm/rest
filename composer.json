@@ -1,8 +1,9 @@
 {
+    "name": "befluent/rest-response-formatter",
     "require": {
-        "symfony/http-foundation": "^5.3",
         "ext-mbstring": "*",
         "ext-json": "*",
+        "symfony/http-foundation": "^5.3",
         "spatie/array-to-xml": "^2.16"
     },
     "require-dev": {
