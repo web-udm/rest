@@ -79,7 +79,7 @@ class ResponseBuilder
         string $message = "Users successfully fetched",
         array $headers = []
     ): EntitiesResponse {
-        $entitiesArray = array_reduce($entities->all(), function(array $carry, EntityInterface $item) {
+        $entitiesArray = array_reduce($entities->all(), function (array $carry, EntityInterface $item) {
             $carry[] = $item->toArray();
             return $carry;
         }, []);

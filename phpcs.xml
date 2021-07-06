@@ -1,0 +1,5 @@
+<?xml version="1.0"?>
+<ruleset name="tmm">
+    <rule ref="PSR1"></rule>
+    <rule ref="PSR12"></rule>
+</ruleset>
