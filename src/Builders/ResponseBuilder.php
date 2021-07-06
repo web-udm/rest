@@ -3,7 +3,7 @@
 namespace App\Builders;
 
 use App\Entities\EntitiesCollection;
-use App\Entities\EntityInterface;
+use App\Entities\Entity;
 use App\Responses\BaseResponse;
 use App\Responses\EntitiesResponse;
 use App\Responses\EntityResponse;
@@ -38,7 +38,7 @@ class ResponseBuilder
     }
 
     /**
-     * @param EntityInterface $entity
+     * @param Entity $entity
      * @param string          $type
      * @param int             $code
      * @param string          $message
@@ -48,7 +48,7 @@ class ResponseBuilder
      * @throws \Exception
      */
     public function createEntityResponse(
-        EntityInterface $entity,
+        Entity $entity,
         string $type = 'json',
         int $code = 200,
         string $message = "User successfully fetched",
@@ -85,7 +85,7 @@ class ResponseBuilder
         array $headers = []
     ): EntitiesResponse
     {
-        $entitiesArray = array_reduce($entities->all(), function (array $carry, EntityInterface $item) {
+        $entitiesArray = array_reduce($entities->all(), function (array $carry, Entity $item) {
             $carry[] = $item->toArray();
 
             return $carry;

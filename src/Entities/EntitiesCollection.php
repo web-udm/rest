@@ -4,9 +4,9 @@ namespace App\Entities;
 
 interface EntitiesCollection
 {
-    public function __construct(EntityInterface ...$entities);
+    public function __construct(Entity ...$entities);
 
-    public function add(EntityInterface $entity): void;
+    public function add(Entity $entity): void;
 
     public function all(): array;
 }
