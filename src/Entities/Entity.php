@@ -2,7 +2,7 @@
 
 namespace App\Entities;
 
-interface EntityInterface
+interface Entity
 {
     public function toArray(): array;
 }
