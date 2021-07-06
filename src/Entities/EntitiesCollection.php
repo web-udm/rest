@@ -1,10 +1,12 @@
 <?php
 
-
 namespace App\Entities;
 
-
-class EntitiesCollection
+interface EntitiesCollection
 {
+    public function __construct(EntityInterface ...$entities);
 
+    public function add(EntityInterface $entity): void;
+
+    public function all(): array;
 }
