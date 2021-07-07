@@ -2,120 +2,110 @@
 
 namespace App\Builders;
 
-use App\Entities\EntitiesCollection;
+use App\Entities\EntitiesMetaData;
+use App\Entities\EntityCollection;
 use App\Entities\Entity;
-use App\Responses\BaseResponse;
-use App\Responses\EntitiesResponse;
-use App\Responses\EntityResponse;
+use App\Exceptions\UnknownSerializerType;
+use App\HeadersFactory\Base\HeadersFactoryInterface;
+use App\SerializerFactory\Base\SerializerFactoryInterface;
+use App\Serializers\Serializer;
+use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * Class ResponseBuilder
+ * @package App\Builders
+ */
 class ResponseBuilder
 {
-    private const CONTENT_TYPES = [
-        'json' => ['Content-type' => 'text/json'],
-        'xml'  => ['Content-type' => 'text/xml'],
-    ];
+    private const DEFAULT_RESPONSE_TYPE = 'json';
+
+    private Serializer                 $serializer;
+    private SerializerFactoryInterface $serializerFactory;
+    private HeadersFactoryInterface    $headersFactory;
+    private array                      $headers;
+
+    /**
+     * ResponseBuilder constructor.
+     *
+     * @param SerializerFactoryInterface $serializerFactory
+     * @param HeadersFactoryInterface    $headersFactory
+     *
+     * @throws UnknownSerializerType
+     */
+    public function __construct(SerializerFactoryInterface $serializerFactory, HeadersFactoryInterface $headersFactory)
+    {
+        $this->serializerFactory = $serializerFactory;
+        $this->headersFactory    = $headersFactory;
+
+        $this->headers    = $this->headersFactory->create(self::DEFAULT_RESPONSE_TYPE);
+        $this->serializer = $this->serializerFactory->create(self::DEFAULT_RESPONSE_TYPE);
+    }
+
+    /**
+     * @param string $responseType
+     *
+     * @return $this
+     * @throws UnknownSerializerType
+     */
+    public function setResponseType(string $responseType): static
+    {
+        $this->headers    = $this->headersFactory->create($responseType);
+        $this->serializer = $this->serializerFactory->create($responseType);
+
+        return $this;
+    }
 
     /**
      * @param int    $code
      * @param string $message
-     * @param string $type
-     * @param array  $headers
      *
-     * @return BaseResponse
-     * @throws \Exception
+     * @return Response
      */
-    public function createBaseResponse(
-        int $code,
-        string $message,
-        string $type = 'json',
-        array $headers = []
-    ): BaseResponse
+    public function createBaseResponse(int $code, string $message): Response
     {
-        $content = $this->serialize(['code' => $code, 'message' => $message], $type);
-        $headers = array_merge($headers, $this->getContentType($type));
+        $content = $this->serializer->serialize([
+            'code'    => $code,
+            'message' => $message,
+        ]);
 
-        return new BaseResponse($content, $code, $headers);
+        return new Response($content, $code, $this->headers);
     }
 
     /**
      * @param Entity $entity
-     * @param string          $type
-     * @param int             $code
-     * @param string          $message
-     * @param array           $headers
+     * @param int    $code
+     * @param string $message
      *
-     * @return EntityResponse
-     * @throws \Exception
+     * @return Response
      */
-    public function createEntityResponse(
-        Entity $entity,
-        string $type = 'json',
-        int $code = 200,
-        string $message = "User successfully fetched",
-        array $headers = []
-    ): EntityResponse
+    public function createEntityResponse(Entity $entity, int $code, string $message): Response
     {
-        $content = $this->serialize([
+        $content = $this->serializer->serialize([
             'code'    => $code,
             'message' => $message,
             'entity'  => $entity->toArray(),
-        ], $type);
-        $headers = array_merge($headers, $this->getContentType($type));
+        ]);
 
-        return new EntityResponse($content, $code, $headers);
+        return new Response($content, $code, $this->headers);
     }
 
     /**
-     * @param EntitiesCollection $entities
-     * @param array              $metadata
-     * @param string             $type
-     * @param int                $code
-     * @param string             $message
-     * @param array              $headers
+     * @param int              $code
+     * @param string           $message
+     * @param EntityCollection $entities
+     * @param EntitiesMetaData $metaData
      *
-     * @return EntitiesResponse
-     * @throws \Exception
+     * @return Response
      */
-    public function createEntitiesResponse(
-        EntitiesCollection $entities,
-        array $metadata = [],
-        string $type = 'json',
-        int $code = 200,
-        string $message = "Users successfully fetched",
-        array $headers = []
-    ): EntitiesResponse
+    public function createEntitiesResponse(int $code, string $message, EntityCollection $entities, EntitiesMetaData $metaData): Response
     {
-        $entitiesArray = array_reduce($entities->all(), function (array $carry, Entity $item) {
-            $carry[] = $item->toArray();
-
-            return $carry;
-        }, []);
-
-        $content = $this->serialize([
+        $content = $this->serializer->serialize([
             'code'     => $code,
             'message'  => $message,
-            'meta'     => $metadata,
-            'entities' => $entitiesArray,
-        ], $type);
+            'meta'     => $metaData->toArray(),
+            'entities' => $entities->getAllAsArray(),
+        ]);
 
-        $headers = array_merge($headers, $this->getContentType($type));
-
-        return new EntitiesResponse($content, $code, $headers);
-    }
-
-    private function serialize(array $data, string $type): string
-    {
-        $serializerName = '\App\Serializers\\' . ucfirst($type) . 'Serializer';
-
-        if (class_exists($serializerName)) {
-            return (new $serializerName())->serialize($data);
-        }
-
-        throw new \Exception("Для типа $type не найден подходящий сериалайзер");
-    }
-
-    private function getContentType(string $type): array
-    {
-        return self::CONTENT_TYPES[$type] ?: [];
+        return new Response($content, $code, $this->headers);
     }
 }

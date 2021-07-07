@@ -4,7 +4,7 @@ namespace App\Serializers;
 
 use Spatie\ArrayToXml\ArrayToXml;
 
-class XmlSerializer
+class XmlSerializer implements Serializer
 {
     /**
      * @param array $data

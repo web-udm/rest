@@ -2,7 +2,11 @@
 
 namespace App\Serializers;
 
-class JsonSerializer
+/**
+ * Class JsonSerializer
+ * @package App\Serializers
+ */
+class JsonSerializer implements Serializer
 {
     /**
      * @param array $data

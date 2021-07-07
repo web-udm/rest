@@ -3,7 +3,7 @@
 namespace Tests\Unit\Builders;
 
 use App\Builders\ResponseBuilder;
-use App\Entities\EntitiesCollection;
+use App\Entities\EntityCollection;
 use App\Entities\Entity;
 use App\Responses\BaseResponse;
 use App\Responses\EntitiesResponse;
@@ -149,14 +149,14 @@ class ResponseBuilderTest extends TestCase
     }
 
     /**
-     * @return EntitiesCollection
+     * @return EntityCollection
      */
     private function createEntityCollection()
     {
         $entity1 = $this->createEntity();
         $entity2 = $this->createEntity();
 
-        return new class($entity1, $entity2) implements EntitiesCollection {
+        return new class($entity1, $entity2) implements EntityCollection {
             private $entities;
 
             public function __construct(Entity ...$entities)
