@@ -2,7 +2,11 @@
 
 namespace App\Interfaces;
 
-interface EntityInterface
+/**
+ * Interface Entity
+ * @package App\Entities
+ */
+interface Entity
 {
     public function toArray(): array;
 }

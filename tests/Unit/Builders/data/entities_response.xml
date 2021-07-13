@@ -1,0 +1,19 @@
+<?xmlversion="1.0"?>
+<root>
+    <code>200</code>
+    <message>Users successfully fetched</message>
+    <meta>
+        <page>1</page>
+        <page_total_count>2</page_total_count>
+        <entity_limit>3</entity_limit>
+        <entity_total_count>4</entity_total_count>
+    </meta>
+    <entities>
+        <firstname>Artem</firstname>
+        <surname>Ivanov</surname>
+    </entities>
+    <entities>
+        <firstname>Artem</firstname>
+        <surname>Ivanov</surname>
+    </entities>
+</root>

@@ -1,0 +1,21 @@
+{
+  "code": 200,
+  "message": "Users successfully fetched",
+  "meta": {
+    "page": 1,
+    "page_total_count": 2,
+    "entity_limit": 3,
+    "entity_total_count": 4
+  },
+  "entities": [
+    {
+      "firstname": "Artem",
+      "surname": "Ivanov"
+    },
+    {
+      "firstname": "Artem",
+      "surname": "Ivanov"
+    }
+  ]
+}
+
