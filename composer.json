@@ -1,6 +1,7 @@
 {
     "name": "befluent/rest-response-formatter",
     "require": {
+        "php": ">=7.4",
         "ext-mbstring": "*",
         "ext-json": "*",
         "symfony/http-foundation": "^5.3",

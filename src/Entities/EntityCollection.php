@@ -2,6 +2,8 @@
 
 namespace App\Entities;
 
+use App\Entities\Entity;
+
 /**
  * Class EntityCollection
  * @package App\Entities
@@ -18,7 +20,7 @@ class EntityCollection
      *
      * @return $this
      */
-    public function addEntity(Entity $entity): static
+    public function addEntity(Entity $entity): self
     {
         $this->entities[] = $entity;
 

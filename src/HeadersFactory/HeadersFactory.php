@@ -19,9 +19,13 @@ class HeadersFactory implements HeadersFactoryInterface
     public function create(string $responseType): array
     {
         if ($responseType === static::JSON_RESPONSE) {
-            $headers = [];
+            $headers = [
+                'content-type' => 'application/json'
+            ];
         } elseif ($responseType === static::XML_RESPONSE) {
-            $headers = [];
+            $headers = [
+                'content-type' => 'text/xml'
+            ];
         } else {
             $headers = [];
         }

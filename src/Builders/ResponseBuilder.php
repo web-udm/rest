@@ -4,9 +4,9 @@ namespace App\Builders;
 
 use App\Entities\EntitiesMetaData;
 use App\Entities\EntityCollection;
-use App\Entities\Entity;
 use App\Exceptions\UnknownSerializerType;
 use App\HeadersFactory\Base\HeadersFactoryInterface;
+use App\Entities\Entity;
 use App\SerializerFactory\Base\SerializerFactoryInterface;
 use App\Serializers\Serializer;
 use Symfony\Component\HttpFoundation\Response;
@@ -47,7 +47,7 @@ class ResponseBuilder
      * @return $this
      * @throws UnknownSerializerType
      */
-    public function setResponseType(string $responseType): static
+    public function setResponseType(string $responseType): self
     {
         $this->headers    = $this->headersFactory->create($responseType);
         $this->serializer = $this->serializerFactory->create($responseType);
