@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <root>
     <code>200</code>
-    <message>User successfully fetched</message>
+    <message>Entity successfully fetched</message>
     <entity>
         <firstname>Artem</firstname>
         <surname>Ivanov</surname>

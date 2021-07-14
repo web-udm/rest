@@ -1,6 +1,6 @@
 {
   "code": 200,
-  "message": "Users successfully fetched",
+  "message": "Entities successfully fetched",
   "meta": {
     "page": 1,
     "page_total_count": 2,

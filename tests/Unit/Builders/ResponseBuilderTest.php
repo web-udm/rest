@@ -3,129 +3,166 @@
 namespace Tests\Unit\Builders;
 
 use App\Builders\ResponseBuilder;
+use App\HeadersFactory\HeadersFactory;
+use App\Entities\EntitiesMetaData;
 use App\Entities\EntityCollection;
-use App\Entities\Entity;
-use App\Responses\BaseResponse;
-use App\Responses\EntitiesResponse;
-use App\Responses\EntityResponse;
+use App\SerializerFactory\SerializerFactory;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpFoundation\Response;
 use Tests\Unit\Serializers\Helpers\StringHelper;
+use App\Entities\Entity;
 
 class ResponseBuilderTest extends TestCase
 {
     public function testBuildJsonBaseResponse()
     {
         $stringHelper    = new StringHelper();
-        $responseBuilder = new ResponseBuilder();
-        $baseResponse    = $responseBuilder->createBaseResponse(404, 'Error');
+        $responseBuilder = new ResponseBuilder(new SerializerFactory(), new HeadersFactory());
+
+        $baseResponse = $responseBuilder->createBaseResponse(404, 'Error');
 
         $expectedResponseBody              = file_get_contents(__DIR__ . '/data/base_response.json');
         $expectedResponseBodyWithoutSpaces = $stringHelper->cutSpacesAndBreaks($expectedResponseBody);
 
-        $this->assertInstanceOf(BaseResponse::class, $baseResponse);
+        $this->assertInstanceOf(Response::class, $baseResponse);
         $this->assertEquals(404, $baseResponse->getStatusCode());
         $this->assertEquals(
             $expectedResponseBodyWithoutSpaces,
             $stringHelper->cutSpacesAndBreaks($baseResponse->getContent())
+        );
+        $this->assertEquals(
+            'application/json', $baseResponse->headers->get('content-type')
         );
     }
 
     public function testBuildXmlBaseResponse()
     {
         $stringHelper    = new StringHelper();
-        $responseBuilder = new ResponseBuilder();
-        $baseResponse    = $responseBuilder->createBaseResponse(404, 'Error', 'xml');
+        $responseBuilder = new ResponseBuilder(new SerializerFactory(), new HeadersFactory());
+        $responseBuilder->setResponseType('xml');
+        $baseResponse = $responseBuilder->createBaseResponse(404, 'Error');
 
         $expectedResponseBody              = file_get_contents(__DIR__ . '/data/base_response.xml');
         $expectedResponseBodyWithoutSpaces = $stringHelper->cutSpacesAndBreaks($expectedResponseBody);
 
-        $this->assertInstanceOf(BaseResponse::class, $baseResponse);
+        $this->assertInstanceOf(Response::class, $baseResponse);
         $this->assertEquals(404, $baseResponse->getStatusCode());
         $this->assertEquals(
             $expectedResponseBodyWithoutSpaces,
             $stringHelper->cutSpacesAndBreaks($baseResponse->getContent())
+        );
+        $this->assertEquals(
+            'text/xml', $baseResponse->headers->get('content-type')
         );
     }
 
     public function testBuildJsonEntityResponse()
     {
         $stringHelper    = new StringHelper();
-        $responseBuilder = new ResponseBuilder();
+        $responseBuilder = new ResponseBuilder(new SerializerFactory(), new HeadersFactory());
         $entity          = $this->createEntity();
-        $entityResponse  = $responseBuilder->createEntityResponse($entity);
+        $entityResponse  = $responseBuilder->createEntityResponse($entity, 200, 'Entity successfully fetched');
 
         $expectedResponseBody              = file_get_contents(__DIR__ . '/data/entity_response.json');
         $expectedResponseBodyWithoutSpaces = $stringHelper->cutSpacesAndBreaks($expectedResponseBody);
 
-        $this->assertInstanceOf(EntityResponse::class, $entityResponse);
+        $this->assertInstanceOf(Response::class, $entityResponse);
         $this->assertEquals(200, $entityResponse->getStatusCode());
         $this->assertEquals(
             $expectedResponseBodyWithoutSpaces,
             $stringHelper->cutSpacesAndBreaks($entityResponse->getContent())
+        );
+        $this->assertEquals(
+            'application/json', $entityResponse->headers->get('content-type')
         );
     }
 
     public function testBuildXmlEntityResponse()
     {
         $stringHelper    = new StringHelper();
-        $responseBuilder = new ResponseBuilder();
-        $entity          = $this->createEntity();
-        $entityResponse  = $responseBuilder->createEntityResponse($entity, 'xml');
+        $responseBuilder = new ResponseBuilder(new SerializerFactory(), new HeadersFactory());
+        $responseBuilder->setResponseType('xml');
+        $entity         = $this->createEntity();
+        $entityResponse = $responseBuilder->createEntityResponse(
+            $entity,
+            200,
+            'Entity successfully fetched'
+        );
 
         $expectedResponseBody              = file_get_contents(__DIR__ . '/data/entity_response.xml');
         $expectedResponseBodyWithoutSpaces = $stringHelper->cutSpacesAndBreaks($expectedResponseBody);
 
-        $this->assertInstanceOf(EntityResponse::class, $entityResponse);
+        $this->assertInstanceOf(Response::class, $entityResponse);
         $this->assertEquals(200, $entityResponse->getStatusCode());
         $this->assertEquals(
             $expectedResponseBodyWithoutSpaces,
             $stringHelper->cutSpacesAndBreaks($entityResponse->getContent())
+        );
+        $this->assertEquals(
+            'text/xml', $entityResponse->headers->get('content-type')
         );
     }
 
     public function testBuildJsonEntitiesResponse()
     {
         $stringHelper       = new StringHelper();
-        $responseBuilder    = new ResponseBuilder();
-        $entitiesCollection = $this->createEntityCollection();
-        $entitiesResponse   = $responseBuilder->createEntitiesResponse($entitiesCollection, [
-            "page"               => 1,
-            "page_total_count"   => 2,
-            "entity_limit"       => 3,
-            "entity_total_count" => 4,
-        ]);
+        $responseBuilder    = new ResponseBuilder(new SerializerFactory(), new HeadersFactory());
+        $entitiesCollection = new EntityCollection();
+        $entitiesCollection
+            ->addEntity($this->createEntity())
+            ->addEntity($this->createEntity());
+        $entitiesMetaData = new EntitiesMetaData(2, 3, 4,1);
+
+        $entitiesResponse = $responseBuilder->createEntitiesResponse(
+            200,
+            'Entities successfully fetched',
+            $entitiesCollection,
+            $entitiesMetaData
+        );
 
         $expectedResponseBody              = file_get_contents(__DIR__ . '/data/entities_response.json');
         $expectedResponseBodyWithoutSpaces = $stringHelper->cutSpacesAndBreaks($expectedResponseBody);
 
-        $this->assertInstanceOf(EntitiesResponse::class, $entitiesResponse);
+        $this->assertInstanceOf(Response::class, $entitiesResponse);
         $this->assertEquals(200, $entitiesResponse->getStatusCode());
         $this->assertEquals(
             $expectedResponseBodyWithoutSpaces,
             $stringHelper->cutSpacesAndBreaks($entitiesResponse->getContent())
+        );
+        $this->assertEquals(
+            'application/json', $entitiesResponse->headers->get('content-type')
         );
     }
 
     public function testBuildXmlEntitiesResponse()
     {
         $stringHelper       = new StringHelper();
-        $responseBuilder    = new ResponseBuilder();
-        $entitiesCollection = $this->createEntityCollection();
-        $entitiesResponse   = $responseBuilder->createEntitiesResponse($entitiesCollection, [
-            "page"               => 1,
-            "page_total_count"   => 2,
-            "entity_limit"       => 3,
-            "entity_total_count" => 4,
-        ], 'xml');
+        $responseBuilder    = new ResponseBuilder(new SerializerFactory(), new HeadersFactory());
+        $responseBuilder->setResponseType('xml');
+        $entitiesCollection = new EntityCollection();
+        $entitiesCollection
+            ->addEntity($this->createEntity())
+            ->addEntity($this->createEntity());
+        $entitiesMetaData = new EntitiesMetaData(2, 3, 4,1);
+
+        $entitiesResponse = $responseBuilder->createEntitiesResponse(
+            200,
+            'Entities successfully fetched',
+            $entitiesCollection,
+            $entitiesMetaData
+        );
 
         $expectedResponseBody              = file_get_contents(__DIR__ . '/data/entities_response.xml');
         $expectedResponseBodyWithoutSpaces = $stringHelper->cutSpacesAndBreaks($expectedResponseBody);
 
-        $this->assertInstanceOf(EntitiesResponse::class, $entitiesResponse);
+        $this->assertInstanceOf(Response::class, $entitiesResponse);
         $this->assertEquals(200, $entitiesResponse->getStatusCode());
         $this->assertEquals(
             $expectedResponseBodyWithoutSpaces,
             $stringHelper->cutSpacesAndBreaks($entitiesResponse->getContent())
+        );
+        $this->assertEquals(
+            'text/xml', $entitiesResponse->headers->get('content-type')
         );
     }
 
@@ -144,33 +181,6 @@ class ResponseBuilderTest extends TestCase
                     'firstname' => $this->firstname,
                     'surname'   => $this->surname,
                 ];
-            }
-        };
-    }
-
-    /**
-     * @return EntityCollection
-     */
-    private function createEntityCollection()
-    {
-        $entity1 = $this->createEntity();
-        $entity2 = $this->createEntity();
-
-        return new class($entity1, $entity2) implements EntityCollection {
-            private $entities;
-
-            public function __construct(Entity ...$entities)
-            {
-                $this->entities = $entities;
-            }
-
-            public function add(Entity $entity): void
-            {
-            }
-
-            public function all(): array
-            {
-                return $this->entities;
             }
         };
     }

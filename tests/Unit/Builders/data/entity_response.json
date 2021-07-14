@@ -1,6 +1,6 @@
 {
   "code": 200,
-  "message": "User successfully fetched",
+  "message": "Entity successfully fetched",
   "entity": {
     "firstname": "Artem",
     "surname": "Ivanov"
