@@ -2,6 +2,7 @@
 
 namespace App\HeadersFactory;
 
+use App\Exceptions\UnknownResponseType;
 use App\HeadersFactory\Base\HeadersFactoryInterface;
 
 /**
@@ -27,7 +28,7 @@ class HeadersFactory implements HeadersFactoryInterface
                 'content-type' => 'text/xml'
             ];
         } else {
-            $headers = [];
+            throw new UnknownResponseType();
         }
 
         return $headers;

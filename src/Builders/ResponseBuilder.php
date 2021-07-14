@@ -25,8 +25,6 @@ class ResponseBuilder
     private array                      $headers;
 
     /**
-     * ResponseBuilder constructor.
-     *
      * @param SerializerFactoryInterface $serializerFactory
      * @param HeadersFactoryInterface    $headersFactory
      *
@@ -37,22 +35,24 @@ class ResponseBuilder
         $this->serializerFactory = $serializerFactory;
         $this->headersFactory    = $headersFactory;
 
-        $this->headers    = $this->headersFactory->create(self::DEFAULT_RESPONSE_TYPE);
-        $this->serializer = $this->serializerFactory->create(self::DEFAULT_RESPONSE_TYPE);
+        $this->setResponseType(self::DEFAULT_RESPONSE_TYPE);
     }
 
     /**
      * @param string $responseType
      *
      * @return $this
-     * @throws UnknownSerializerType
      */
     public function setResponseType(string $responseType): self
     {
-        $this->headers    = $this->headersFactory->create($responseType);
-        $this->serializer = $this->serializerFactory->create($responseType);
+        try {
+            $this->headers    = $this->headersFactory->create($responseType);
+            $this->serializer = $this->serializerFactory->create($responseType);
 
-        return $this;
+            return $this;
+        } catch (\Exception $e) {
+            echo $e->getMessage();
+        }
     }
 
     /**

@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\Factories;
 
+use App\Exceptions\UnknownResponseType;
 use App\HeadersFactory\HeadersFactory;
 use PHPUnit\Framework\TestCase;
 
@@ -27,6 +28,8 @@ class HeadersFactoryTest extends TestCase
     {
         $headersFactory = new HeadersFactory();
 
-        $this->expectException($headersFactory->create('invalid_type'));
+        $this->expectException(UnknownResponseType::class);
+
+        $headersFactory->create('unknown_type');
     }
 }
