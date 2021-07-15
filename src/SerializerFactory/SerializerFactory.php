@@ -7,7 +7,6 @@ use App\SerializerFactory\Base\SerializerFactoryInterface;
 use App\Serializers\Serializer;
 
 /**
- * Class SerializerFactory
  * @package App\SerializerFactory
  */
 class SerializerFactory implements SerializerFactoryInterface

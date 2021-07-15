@@ -3,7 +3,6 @@
 namespace App\Serializers;
 
 /**
- * Interface Serializer
  * @package App\Serializers
  */
 interface Serializer

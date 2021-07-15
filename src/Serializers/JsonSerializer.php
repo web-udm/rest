@@ -3,7 +3,6 @@
 namespace App\Serializers;
 
 /**
- * Class JsonSerializer
  * @package App\Serializers
  */
 class JsonSerializer implements Serializer

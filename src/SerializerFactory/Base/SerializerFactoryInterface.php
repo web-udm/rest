@@ -6,7 +6,6 @@ use App\Exceptions\UnknownSerializerType;
 use App\Serializers\Serializer;
 
 /**
- * Interface SerializerFactoryInterface
  * @package App\SerializerFactory
  */
 interface SerializerFactoryInterface

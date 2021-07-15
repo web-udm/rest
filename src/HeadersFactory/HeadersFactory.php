@@ -21,11 +21,11 @@ class HeadersFactory implements HeadersFactoryInterface
     {
         if ($responseType === static::JSON_RESPONSE) {
             $headers = [
-                'content-type' => 'application/json'
+                'content-type' => 'application/json',
             ];
         } elseif ($responseType === static::XML_RESPONSE) {
             $headers = [
-                'content-type' => 'text/xml'
+                'content-type' => 'text/xml',
             ];
         } else {
             throw new UnknownResponseType();

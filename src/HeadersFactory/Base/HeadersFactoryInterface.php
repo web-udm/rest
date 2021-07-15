@@ -3,7 +3,6 @@
 namespace App\HeadersFactory\Base;
 
 /**
- * Interface HeadersFactoryInterface
  * @package App\HeadersFactory
  */
 interface HeadersFactoryInterface

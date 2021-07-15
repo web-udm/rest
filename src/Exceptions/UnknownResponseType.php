@@ -2,8 +2,7 @@
 
 namespace App\Exceptions;
 
-/**
- * Class UnknownResponseType
+/**e
  * @package App\Exceptions
  */
 class UnknownResponseType extends \Exception
