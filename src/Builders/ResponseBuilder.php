@@ -4,7 +4,6 @@ namespace App\Builders;
 
 use App\Entities\EntitiesMetaData;
 use App\Entities\EntityCollection;
-use App\Exceptions\UnknownSerializerType;
 use App\HeadersFactory\Base\HeadersFactoryInterface;
 use App\Entities\Entity;
 use App\SerializerFactory\Base\SerializerFactoryInterface;
@@ -12,7 +11,6 @@ use App\Serializers\Serializer;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Class ResponseBuilder
  * @package App\Builders
  */
 class ResponseBuilder
@@ -27,8 +25,6 @@ class ResponseBuilder
     /**
      * @param SerializerFactoryInterface $serializerFactory
      * @param HeadersFactoryInterface    $headersFactory
-     *
-     * @throws UnknownSerializerType
      */
     public function __construct(SerializerFactoryInterface $serializerFactory, HeadersFactoryInterface $headersFactory)
     {
@@ -51,7 +47,7 @@ class ResponseBuilder
 
             return $this;
         } catch (\Exception $e) {
-            echo $e->getMessage();
+            exit($e->getMessage());
         }
     }
 
@@ -97,8 +93,12 @@ class ResponseBuilder
      *
      * @return Response
      */
-    public function createEntitiesResponse(int $code, string $message, EntityCollection $entities, EntitiesMetaData $metaData): Response
-    {
+    public function createEntitiesResponse(
+        int $code,
+        string $message,
+        EntityCollection $entities,
+        EntitiesMetaData $metaData
+    ): Response {
         $content = $this->serializer->serialize([
             'code'     => $code,
             'message'  => $message,
