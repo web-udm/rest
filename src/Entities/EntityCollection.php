@@ -2,10 +2,7 @@
 
 namespace App\Entities;
 
-use App\Entities\Entity;
-
 /**
- * Class EntityCollection
  * @package App\Entities
  */
 class EntityCollection

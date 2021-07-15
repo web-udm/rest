@@ -6,7 +6,6 @@ use App\Exceptions\UnknownResponseType;
 use App\HeadersFactory\Base\HeadersFactoryInterface;
 
 /**
- * Class HeadersFactory
  * @package App\HeadersFactory
  */
 class HeadersFactory implements HeadersFactoryInterface

@@ -4,6 +4,9 @@ namespace App\Serializers;
 
 use Spatie\ArrayToXml\ArrayToXml;
 
+/**
+ * @package App\Serializers
+ */
 class XmlSerializer implements Serializer
 {
     /**

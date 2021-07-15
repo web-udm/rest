@@ -3,7 +3,6 @@
 namespace App\Entities;
 
 /**
- * Class MetaData
  * @package App\Entities
  */
 class EntitiesMetaData
