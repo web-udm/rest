@@ -1,5 +1,12 @@
 {
-    "name": "befluent/rest-response-formatter",
+    "name": "web-udm/rest",
+    "authors": [
+        {
+            "name": "Ildar Mosnabeev",
+            "email": "web.udm@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
     "require": {
         "php": ">=7.4",
         "ext-mbstring": "*",
